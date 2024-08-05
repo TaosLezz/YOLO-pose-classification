@@ -61,7 +61,7 @@ while True:
         for person_keypoints in keypoints:
             plot_skeleton_kpts(img, person_keypoints, radius=5, shape=img.shape[:2], confi=0.5, line_thick=2)
         
-
+    
     # img = cv2.resize(img, (1080, 720))
     cv2.imshow('img', img)
     if cv2.waitKey(1) & 0xFF == ord('q'):

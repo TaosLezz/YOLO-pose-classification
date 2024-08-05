@@ -5,7 +5,7 @@ from utils import plot_skeleton_kpts, plot_one_box
 
 
 
-video_path = r'E:\aHieu\pose_recognition\video\stand.mp4'
+video_path = r'E:\aHieu\YOLO_pose_sleep\videos\Cam-5_2024-08-02_16-46-30.avi'
 
 model = YOLO(r'E:\aHieu\YOLO_pose_sleep\models\yolov8m-pose.pt')
 cap = cv2.VideoCapture(video_path)
@@ -17,7 +17,7 @@ while True:
         print('[INFO] Failed to Read...')
         break
 
-    results = model.predict(img)
+    # results = model.predict(img)
     results = model.predict(img, conf = 0.3)
     for result in results:
         for box, pose in zip(result.boxes, result.keypoints.data.numpy()):
