@@ -45,7 +45,7 @@ def plot_skeleton_kpts(im, kpts, radius=5, shape=(640, 640), confi=0.5, line_thi
 
 # model = YOLO('yolov8n-pose.pt')
 model = YOLO(r'E:\aHieu\YOLO_pose_sleep\models\yolov8m-pose.pt')
-video_path = r'E:\aHieuCCTV\PoseClassifier-yolo\videos\dance.mp4'
+video_path = r'E:\aHieu\YOLO_pose_sleep\Media\dance.mp4'
 cap = cv2.VideoCapture(video_path)
 
 
