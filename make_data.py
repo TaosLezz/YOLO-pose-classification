@@ -7,11 +7,11 @@ import torch
 from equilib import equi2pers
 from utils import plot_one_box, plot_skeleton_kpts
 
-video_path = r'E:\aHieu\YOLO_pose_sleep\videos\Cam-5_2024-08-02_16-46-30.avi'
-# video_path = r'C:\Users\Tao Le\Videos\atien5.mp4'
+# video_path = r'E:\aHieu\YOLO_pose_sleep\videos\Cam-5_2024-08-02_16-46-30.avi'
+video_path = r'E:\aHieu\YOLO_pose_sleep\videos\2.avi'
 
 lm_list = []
-label = "NORMAL"
+label = "SLEEP"
 no_of_frames = 600
 
 frame_count = 0
@@ -27,23 +27,20 @@ if not cap.isOpened():
 width = int(cap.get(cv2.CAP_PROP_FRAME_WIDTH))
 height = int(cap.get(cv2.CAP_PROP_FRAME_HEIGHT))
 
-# rots = {
-#     'roll': 0,
-#     'pitch': np.pi/6.5,  # xoay theo trục dọc
-#     'yaw': np.pi/-5,    # xoay theo trục ngang
-# }
-
-# Đặt các giá trị xoay
+#DATA SLEEP DETECT
 rots = {
     'roll': 0,
-    'pitch': np.pi/2.5,  # xoay theo trục dọc
-    'yaw': np.pi/-5,    # xoay theo trục ngang
+    'pitch': np.pi/6.5,  # xoay theo trục dọc
+    'yaw': np.pi/-7,    # xoay theo trục ngang
 }
+
+# # Đặt các giá trị xoay XRAY ROOM
 # rots = {
 #     'roll': 0,
 #     'pitch': np.pi/2.5,  # xoay theo trục dọc
-#     'yaw': np.pi/10,    # xoay theo trục ngang
+#     'yaw': np.pi/-5,    # xoay theo trục ngang
 # }
+
 model = YOLO(r'E:\aHieu\YOLO_pose_sleep\models\yolov8m-pose.pt')
 
 while len(lm_list) <= no_of_frames:
