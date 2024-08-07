@@ -19,7 +19,7 @@ poses = None
 yolo_model = YOLO(r'E:\aHieu\YOLO_pose_sleep\models\yolov8m-pose.pt')
 model = tf.keras.models.load_model(r"E:\aHieu\YOLO_pose_sleep\test_sigmoid\model1.h5")
 
-video = r'E:\aHieu\YOLO_pose_sleep\videos\1and2.mp4'
+video = r'E:\aHieu\YOLO_pose_sleep\test_sigmoid\output.avi'
 cap = cv2.VideoCapture(video)
 # Kiểm tra xem camera có được mở thành công không
 if not cap.isOpened():
@@ -69,40 +69,40 @@ while True:
     height = 600
     dim = (width, height)
 
-    # result_frame = cv2.resize(img, dim, interpolation=cv2.INTER_AREA)
-    # Chuyển đổi ảnh sang định dạng mà hàm equi2pers yêu cầu (C, H, W)
-    equi_img = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
-    equi_img = np.transpose(equi_img, (2, 0, 1))  # Chuyển đổi sang định dạng (C, H, W)
-    tensor_equi_img = torch.from_numpy(equi_img)  # Chuyển đổi thành tensor PyTorch
-    tensor_equi_img = tensor_equi_img.cuda() if torch.cuda.is_available() else tensor_equi_img  # Di chuyển lên GPU nếu có CUDA
+    result_frame = cv2.resize(frame, dim, interpolation=cv2.INTER_AREA)
+    # # Chuyển đổi ảnh sang định dạng mà hàm equi2pers yêu cầu (C, H, W)
+    # equi_img = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
+    # equi_img = np.transpose(equi_img, (2, 0, 1))  # Chuyển đổi sang định dạng (C, H, W)
+    # tensor_equi_img = torch.from_numpy(equi_img)  # Chuyển đổi thành tensor PyTorch
+    # tensor_equi_img = tensor_equi_img.cuda() if torch.cuda.is_available() else tensor_equi_img  # Di chuyển lên GPU nếu có CUDA
 
-    # Chạy hàm equi2pers
-    pers_img = equi2pers(
-        equi=tensor_equi_img,  # Truyền tensor đã chuyển đổi
-        rots=rots,
-        height=1080,
-        width=1280,
-        fov_x=60.0,
-        mode="bilinear",
-    )
+    # # Chạy hàm equi2pers
+    # pers_img = equi2pers(
+    #     equi=tensor_equi_img,  # Truyền tensor đã chuyển đổi
+    #     rots=rots,
+    #     height=1080,
+    #     width=1280,
+    #     fov_x=60.0,
+    #     mode="bilinear",
+    # )
 
-    # Chuyển đổi lại ảnh từ định dạng (C, H, W) sang (H, W, C)
-    pers_img = pers_img.cpu().numpy()  # Chuyển về numpy array
-    pers_img = np.transpose(pers_img, (1, 2, 0))  # Chuyển đổi sang định dạng (H, W, C)
-    pers_img = cv2.cvtColor(pers_img, cv2.COLOR_RGB2BGR)  # Chuyển đổi từ RGB sang BGR để lưu bằng OpenCV
+    # # Chuyển đổi lại ảnh từ định dạng (C, H, W) sang (H, W, C)
+    # pers_img = pers_img.cpu().numpy()  # Chuyển về numpy array
+    # pers_img = np.transpose(pers_img, (1, 2, 0))  # Chuyển đổi sang định dạng (H, W, C)
+    # pers_img = cv2.cvtColor(pers_img, cv2.COLOR_RGB2BGR)  # Chuyển đổi từ RGB sang BGR để lưu bằng OpenCV
 
-    # Làm nét ảnh bằng bộ lọc Unsharp Mask
-    gaussian_blur = cv2.GaussianBlur(pers_img, (9, 9), 10.0)
-    sharp_img = cv2.addWeighted(pers_img, 1.5, gaussian_blur, -0.5, 0)
-    result_frame = cv2.resize(sharp_img, (800, 600))
+    # # Làm nét ảnh bằng bộ lọc Unsharp Mask
+    # gaussian_blur = cv2.GaussianBlur(pers_img, (9, 9), 10.0)
+    # sharp_img = cv2.addWeighted(pers_img, 1.5, gaussian_blur, -0.5, 0)
+    # result_frame = cv2.resize(sharp_img, (800, 600))
     fps_end_time = time.time()
     time_diff = fps_end_time - fps_start_time
-    fps = 1 / time_diff
+    fps = 1 / (time_diff + 0.000001)
     fps_start_time = fps_end_time
     fps_text = 'FPS: {:.2f}'.format(fps)
     i = i + 1
     if i > warmup_frames:
-        if i % 2 == 0:
+        if i % 1 == 0:
             print("Start detect....")
             results = yolo_model.predict(result_frame, conf = 0.3)
             for result in results:
